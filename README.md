@@ -4,8 +4,8 @@ WebSocket sample application simulating WhatsApp QRCode authentication with Node
 Clone this repository and run these commands:
 
 ```
-$ bower install --save
-$ npm install --save-dev
+$ bower install
+$ npm install
 $ grunt
 $ node app.js
 ```
