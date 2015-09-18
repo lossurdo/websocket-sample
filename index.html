@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Welcome!</title>
+
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/socket.io-client/socket.io.js"></script>
+	<script src="bower_components/jquery-qrcode/jquery.qrcode.min.js"></script>
+
+	<script>
+	  var socket = io('http://localhost:3000/');
+
+	  socket.on('ping', function (data) {
+	    console.log('Returned from server: ' + data.msg);
+	  });
+
+	  socket.on('sync', function (data) {
+	    console.log('Returned from server: ' + data.ok);
+	    if(data.ok==='true') {
+	    	$('#m').text('Received a smartphone call!');
+	    } else {
+	    	$('#m').text('Smartphone is not on the database!');
+	    }
+	  });
+
+	  $(document).ready(function() {
+		var key = Math.floor((Math.random() * 999999999) + 1);
+		console.log('Random key: ' + key);
+		socket.emit('fromClient', {k:key});
+		console.log('Random key sent to server: ' + key);
+
+		$('#qrcode').qrcode({
+			text:'http://localhost:9000/qrcode.html?key=' + key,
+			width:256,
+			height:256,
+			background:'#fff',
+			foreground:'#000'
+		});
+
+	  });
+	</script>
+
+</head>
+<body>
+	<h1>WebSockets Study</h1>
+
+	<div id="qrcode"></div>
+
+	<h2 id="m">Waiting for mobile phone...</h2>
+</body>
+</html>
