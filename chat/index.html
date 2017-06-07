@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Websocket Chat Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/jquery/dist/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        var socket = io.connect('http://localhost:9000');        
+        socket.on('to_client', function(data) {
+            console.log(data);
+            $('#messages').append(data);
+        });        
+
+        $(window).ready(function() {
+            $('#btnSend').click(function() {
+                var obj = {
+                    'user':$('#username').val(),
+                    'message':$('#message').val()
+                }
+                socket.emit('to_server', JSON.stringify(obj));
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <h4>Username</h4>
+    <input type="text" id="username" placeholder="John Doe">
+
+    <h4>Message</h4>
+    <input type="text" id="message" placeholder="Your message...">
+    <button id="btnSend" type="button">Send</button>
+
+    <hr>
+    <div id="messages"></div>    
+</body>
+
+</html>
